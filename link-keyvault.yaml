@@ -2,6 +2,7 @@ trigger: none
 
 variables:
   - group: vg-create-vg-source
+  - group: devops-secrets-vg
 
 stages:
   - stage: LinkKeyVaultSecrets
@@ -10,6 +11,7 @@ stages:
       - job: LinkSecrets
         displayName: 'Link Secrets to ADO Variable Group'
         pool:
+          name: AKS
           vmImage: 'ubuntu-latest'
         steps:
           - task: AzureCLI@2
