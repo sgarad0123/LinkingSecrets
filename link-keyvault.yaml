@@ -1,0 +1,28 @@
+trigger: none
+
+variables:
+  - group: vg-create-vg-source
+
+stages:
+  - stage: LinkKeyVaultSecrets
+    displayName: 'Link Key Vault Secrets to Variable Group'
+    jobs:
+      - job: LinkSecrets
+        displayName: 'Link Secrets to ADO Variable Group'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: AzureCLI@2
+            displayName: 'Link Secrets to Variable Group'
+            inputs:
+              azureSubscription: $(serviceConnectionId)
+              scriptType: 'bash'
+              scriptPath: './link-keyvault-secrets.sh'
+              workingDirectory: $(System.DefaultWorkingDirectory)
+            env:
+              org: $(org)
+              project: $(project)
+              targetVariableGroupName: $(targetVariableGroupName)
+              keyVaultName: $(keyVaultName)
+              secretsToLink: $(secretsToLink)
+              azure_devops_pat: $(azure-devops-pat)
